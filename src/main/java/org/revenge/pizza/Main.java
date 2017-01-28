@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
-        fileInput.parseFile("input/big.in");
+        fileInput.parseFile("input/small.in");
         List<Slice> slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
@@ -68,7 +68,8 @@ public class Main {
             Cell it = row[cellIt];
             Cell.Type type = it.type;
 
-            if(sliceNumOfTom + sliceNumOfMush > maxIng)
+            //if(sliceNumOfTom + sliceNumOfMush >= maxIng)
+            if(sliceNumOfTom + sliceNumOfMush >= 2*minIng)
             {
                 //remove first element
                 window.startIndex++;
@@ -92,13 +93,16 @@ public class Main {
                 {
                     row[i].inUse = true;
                     slice.cells.add(row[i]);
-                    slices.add(slice);
                 }
+
+                slices.add(slice);
 
                 //Reset slice + window
                 slice = new Slice();
                 window = new Window();
-                window.endIndex = -1;
+                sliceNumOfTom = 0;
+                sliceNumOfMush = 0;
+                window.endIndex = it.col;
                 window.startIndex = it.col + 1;
             }
 
