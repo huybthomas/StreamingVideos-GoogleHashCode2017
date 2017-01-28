@@ -1,6 +1,7 @@
 package org.revenge.pizza;
 
 import org.revenge.pizza.FileHandling.FileInput;
+import org.revenge.pizza.FileHandling.FileOutput;
 import org.revenge.pizza.models.Cell;
 import org.revenge.pizza.models.Slice;
 import org.revenge.pizza.models.Window;
@@ -20,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
-        fileInput.parseFile("input/small.in");
+        fileInput.parseFile("input/big.in");
         List<Slice> slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
@@ -35,6 +36,11 @@ public class Main {
         {
             System.out.println(slice.toString());
         }
+
+        //Write to file
+        FileOutput fileOutput = new FileOutput("resultBig.out");
+
+        fileOutput.OutputResult(slices.size(), slices);
     }
 
     public static List<Slice> slicing(Cell[][] pizza)
@@ -71,8 +77,18 @@ public class Main {
             //if(sliceNumOfTom + sliceNumOfMush >= maxIng)
             if(sliceNumOfTom + sliceNumOfMush >= 2*minIng)
             {
+                if(row[window.startIndex].type == Cell.Type.tomato)
+                {
+                    sliceNumOfTom--;
+                }
+                else
+                {
+                    sliceNumOfMush--;
+                }
+
                 //remove first element
                 window.startIndex++;
+
             }
 
             if(it.type == Cell.Type.tomato)
