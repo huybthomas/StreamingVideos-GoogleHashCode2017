@@ -41,9 +41,9 @@ public class Slice
         StringBuilder s = new StringBuilder();
         s.append(cells.get(0).row);
         s.append(" ");
-        s.append(cells.get(cells.size()-1).row);
-        s.append(" ");
         s.append(cells.get(0).col);
+        s.append(" ");
+        s.append(cells.get(cells.size()-1).row);
         s.append(" ");
         s.append(cells.get(cells.size()-1).col);
 
