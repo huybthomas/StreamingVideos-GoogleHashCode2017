@@ -4,6 +4,8 @@ package org.revenge.pizza.FileHandling;
  * Created by arthu on 28/01/2017.
  */
 
+import org.revenge.pizza.models.Cell;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class FileInput {
     private int maxIngredientsPerSlice;
 
     //Pizza
-    private ArrayList<ArrayList<Character>> pizza = new ArrayList<ArrayList<Character>>();
+    private ArrayList<ArrayList<Cell>> pizza = new ArrayList<ArrayList<Cell>>();
 
     public void parseFile(String fileName)
     {
@@ -95,7 +97,19 @@ public class FileInput {
 
     private void parseLine(int row, int length, String line){
         for(int i = 0; i < length; i++){
-            pizza.get(row).add(line.charAt(i));
+            Cell cell = new Cell();
+
+            switch(line.charAt(i))
+            {
+                case 'T':
+                    cell.type = Cell.Type.tomato;
+                    break;
+                case 'M':
+                    cell.type = Cell.Type.mushroom;
+                    break;
+            }
+
+            pizza.get(row).add(cell);
         }
     }
 }
