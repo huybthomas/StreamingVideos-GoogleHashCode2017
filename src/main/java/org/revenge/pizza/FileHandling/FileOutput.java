@@ -4,8 +4,7 @@ import org.revenge.pizza.models.Slice;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by arthu on 28/01/2017.
@@ -20,7 +19,7 @@ public class FileOutput {
         this.fileName = fileName;
     }
 
-    public void OutputResult(int nSlices, ArrayList<Slice> slices)
+    public void OutputResult(int nSlices, List<Slice> slices)
     {
         try
         {
@@ -32,6 +31,7 @@ public class FileOutput {
             parseSlices(slices);
 
 
+            writer.close();
         }
         catch(Exception e)
         {
@@ -39,7 +39,7 @@ public class FileOutput {
         }
     }
 
-    public void parseSlices(ArrayList<Slice> slices){
+    public void parseSlices(List<Slice> slices){
         for(Slice slice: slices){
             try {
                 writer.write(slice.toString());
