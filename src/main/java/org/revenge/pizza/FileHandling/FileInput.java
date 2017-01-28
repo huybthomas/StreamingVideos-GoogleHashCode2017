@@ -17,13 +17,13 @@ public class FileInput {
     private String sCurrentLine;
     private int line;
 
-    private int nRows;
-    private int nCols;
-    private int minIngredientsPerSlice;
-    private int maxIngredientsPerSlice;
+    public int nRows;
+    public int nCols;
+    public int minIngredientsPerSlice;
+    public int maxIngredientsPerSlice;
 
     //Pizza
-    private Cell[][] pizza;
+    public Cell[][] pizza;
 
     public void parseFile(String fileName)
     {

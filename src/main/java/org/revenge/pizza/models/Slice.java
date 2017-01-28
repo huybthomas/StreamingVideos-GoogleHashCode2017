@@ -11,6 +11,21 @@ public class Slice
 
     public Slice(){};
 
+    public int getNumbOfType(Cell.Type type)
+    {
+        int num = 0;
+
+        for(Cell cell : cells)
+        {
+            if(cell.type == type)
+            {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
