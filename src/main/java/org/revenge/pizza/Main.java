@@ -8,6 +8,7 @@ import org.revenge.pizza.models.Window;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by sdecleeen on 28/01/17.
@@ -21,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
-        fileInput.parseFile("input/big.in");
+        fileInput.parseFile("input/small.in");
         List<Slice> slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
@@ -54,6 +55,7 @@ public class Main {
         }
 
         //Vertical checking
+        IntStream.range(0, colSize).forEach(i -> slices.addAll(verticalCheck(pizza, i)));
 
         return slices;
     }
@@ -127,4 +129,57 @@ public class Main {
 
         return slices;
     }
+
+    public static List<Slice> verticalCheck(Cell[][] pizza, int colIndex)
+    {
+        List<Slice> slices = new ArrayList<Slice>();
+
+        int maxWindowSize = minIng * 2;
+
+        for(int ci = 0; ci < colSize; ci++) {
+            for(int ri = 0; ri < rowSize - maxWindowSize; ri++) {
+                if(isWindowAvailable(pizza, ci, ri, ri + maxWindowSize) && hasIngredients(pizza, ci, ri, ri + maxWindowSize, minIng)) {
+                    slices.add(getSliceVertical(pizza, ci, ri, ri + maxWindowSize));
+                }
+            }
+        }
+
+        return slices;
+    }
+
+    public static boolean isWindowAvailable(Cell[][] pizza, int col, int rs, int re) {
+        for(int i = rs; i< re; i++) {
+            if(pizza[i][col].inUse) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean hasIngredients(Cell[][] pizza, int col, int rs, int re, int l) {
+        boolean hasTomatoes = false;
+        boolean hasMushrooms = false;
+        for(int i = rs; i< re; i++) {
+            if(pizza[i][col].type.equals(Cell.Type.mushroom)) {
+                hasMushrooms = true;
+            }
+            if(pizza[i][col].type.equals(Cell.Type.tomato)) {
+                hasTomatoes = true;
+            }
+            if(hasMushrooms && hasTomatoes) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Slice getSliceVertical(Cell[][] pizza, int col, int rs, int re) {
+        Slice slice = new Slice();
+        for(int i = rs; i< re; i++) {
+            pizza[i][col].inUse = true;
+            slice.cells.add(pizza[i][col]);
+        }
+        return slice;
+    }
+
 }
