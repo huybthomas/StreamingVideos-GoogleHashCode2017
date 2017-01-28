@@ -5,6 +5,8 @@ package org.revenge.pizza.models;
  */
 public class Cell
 {
+    public int row, col;
+
     public Type type;
 
     public enum Type

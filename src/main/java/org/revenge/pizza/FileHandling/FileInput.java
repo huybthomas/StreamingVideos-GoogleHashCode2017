@@ -23,7 +23,7 @@ public class FileInput {
     private int maxIngredientsPerSlice;
 
     //Pizza
-    private ArrayList<ArrayList<Cell>> pizza = new ArrayList<ArrayList<Cell>>();
+    private Cell[][] pizza;
 
     public void parseFile(String fileName)
     {
@@ -42,11 +42,7 @@ public class FileInput {
             minIngredientsPerSlice = Integer.parseInt(sCurrLineSplit[2]);
             maxIngredientsPerSlice = Integer.parseInt(sCurrLineSplit[3]);
 
-            //add rows arraylists to pizza
-            for(int i = 0; i<nRows; i++){
-                pizza.add(new ArrayList<>());
-            }
-
+            pizza = new Cell[nRows][nCols];
             parsePizza(nCols, nRows);
 
             System.out.println("End Parse");
@@ -103,13 +99,16 @@ public class FileInput {
             {
                 case 'T':
                     cell.type = Cell.Type.tomato;
+                    cell.row = row;
+                    cell.col=i;
                     break;
                 case 'M':
                     cell.type = Cell.Type.mushroom;
+                    cell.row = row;
+                    cell.col=i;
                     break;
             }
-
-            pizza.get(row).add(cell);
+            pizza[row][i] = cell;
         }
     }
 }
