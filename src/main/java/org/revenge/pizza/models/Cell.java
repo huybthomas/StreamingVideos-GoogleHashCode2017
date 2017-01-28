@@ -16,5 +16,19 @@ public class Cell
         tomato,
         mushroom
     }
+
+    public int compareTo(Cell c){
+        if(this.row == c.row){
+            if(this.col == c.col)
+                return 0;
+            else if(c.col > this.col)
+                return 1;
+            else
+                return -1;
+        }else if(c.row > this.row)
+            return 1;
+        else
+            return -1;
+    }
 }
 
