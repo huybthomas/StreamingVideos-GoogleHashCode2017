@@ -9,6 +9,8 @@ public class Cell
 
     public Type type;
 
+    public boolean inUse = false;
+
     public enum Type
     {
         tomato,
