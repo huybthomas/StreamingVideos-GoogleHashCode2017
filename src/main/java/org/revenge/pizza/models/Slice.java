@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Slice
 {
-    public ArrayList<Cell> cells;
+    public ArrayList<Cell> cells = new ArrayList<Cell>();
 
     public Slice(){};
 
@@ -31,11 +31,11 @@ public class Slice
         StringBuilder s = new StringBuilder();
         s.append(cells.get(0).row);
         s.append(" ");
-        s.append(cells.get(cells.size()).row);
+        s.append(cells.get(cells.size()-1).row);
         s.append(" ");
         s.append(cells.get(0).col);
         s.append(" ");
-        s.append(cells.get(cells.size()).col);
+        s.append(cells.get(cells.size()-1).col);
 
         return s.toString();
     }
