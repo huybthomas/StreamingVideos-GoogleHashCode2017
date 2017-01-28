@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
-        fileInput.parseFile("input/big.in");
+        fileInput.parseFile("input/small.in");
         List<Slice> slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
@@ -54,10 +54,7 @@ public class Main {
             slices.addAll(horizontalCheck(pizza[i]));
         }
 
-        //Vertical checking
-        for(int i=0; i<colSize; i++) {
-            slices.addAll(verticalCheck(pizza, i));
-        }
+        slices.addAll(verticalCheck(pizza));
 
         return slices;
     }
@@ -132,7 +129,7 @@ public class Main {
         return slices;
     }
 
-    public static List<Slice> verticalCheck(Cell[][] pizza, int colIndex)
+    public static List<Slice> verticalCheck(Cell[][] pizza)
     {
         List<Slice> slices = new ArrayList<Slice>();
 
@@ -162,7 +159,7 @@ public class Main {
     public static boolean hasIngredients(Cell[][] pizza, int col, int rs, int re, int l) {
         int noOfTomatoes = 0;
         int noOfMushrooms = 0;
-        for(int i = rs; i< re; i++) {
+        for(int i = rs; i < re; i++) {
             if(pizza[i][col].type.equals(Cell.Type.mushroom)) {
                 noOfMushrooms++;
             }
