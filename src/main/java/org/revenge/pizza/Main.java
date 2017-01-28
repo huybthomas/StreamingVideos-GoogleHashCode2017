@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
-        fileInput.parseFile("input/small.in");
+        fileInput.parseFile("input/big.in");
         List<Slice> slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
@@ -55,7 +55,9 @@ public class Main {
         }
 
         //Vertical checking
-        IntStream.range(0, colSize).forEach(i -> slices.addAll(verticalCheck(pizza, i)));
+        for(int i=0; i<colSize; i++) {
+            slices.addAll(verticalCheck(pizza, i));
+        }
 
         return slices;
     }
@@ -138,7 +140,8 @@ public class Main {
 
         for(int ci = 0; ci < colSize; ci++) {
             for(int ri = 0; ri < rowSize - maxWindowSize; ri++) {
-                if(isWindowAvailable(pizza, ci, ri, ri + maxWindowSize) && hasIngredients(pizza, ci, ri, ri + maxWindowSize, minIng)) {
+                if(isWindowAvailable(pizza, ci, ri, ri + maxWindowSize)
+                        && hasIngredients(pizza, ci, ri, ri + maxWindowSize, minIng)) {
                     slices.add(getSliceVertical(pizza, ci, ri, ri + maxWindowSize));
                 }
             }
@@ -157,16 +160,16 @@ public class Main {
     }
 
     public static boolean hasIngredients(Cell[][] pizza, int col, int rs, int re, int l) {
-        boolean hasTomatoes = false;
-        boolean hasMushrooms = false;
+        int noOfTomatoes = 0;
+        int noOfMushrooms = 0;
         for(int i = rs; i< re; i++) {
             if(pizza[i][col].type.equals(Cell.Type.mushroom)) {
-                hasMushrooms = true;
+                noOfMushrooms++;
             }
             if(pizza[i][col].type.equals(Cell.Type.tomato)) {
-                hasTomatoes = true;
+                noOfTomatoes++;
             }
-            if(hasMushrooms && hasTomatoes) {
+            if(noOfTomatoes >= l && noOfMushrooms >= l) {
                 return true;
             }
         }
