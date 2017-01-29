@@ -229,11 +229,11 @@ public class Main {
         if(isWindowAvailable(pizza, cs-1, cs-1, rs, re)){
             //if total amount of ingredients would not exceed max
             if(!((slice.getNumCells() + height) > maxIng)) {
-                for (int i = rs; rs <= re; i++) {
+                for (int i = rs; i <= re; i++) {
                     slice.cells.add(pizza[i][cs - 1]);
                     pizza[i][cs - 1].inUse=true;
-                    return true;
                 }
+                return true;
             }
         }
 
@@ -241,11 +241,11 @@ public class Main {
         if(isWindowAvailable(pizza, ce+1, ce+1, rs, re)){
             //if total amount of ingredients would not exceed max
             if(!((slice.getNumCells() + height) > maxIng)) {
-                for (int i = rs; rs <= re; i++) {
+                for (int i = rs; i <= re; i++) {
                     slice.cells.add(pizza[i][ce + 1]);
                     pizza[i][ce + 1].inUse=true;
-                    return true;
                 }
+                return true;
             }
         }
 
@@ -253,11 +253,11 @@ public class Main {
         if(isWindowAvailable(pizza, cs, ce, rs-1, rs-1)){
             //if total amount of ingredients would not exceed max
             if(!((slice.getNumCells() + width) > maxIng)) {
-                for (int i = cs; cs <= ce; i++) {
+                for (int i = cs; i <= ce; i++) {
                     slice.cells.add(pizza[rs-1][i]);
                     pizza[rs-1][i].inUse=true;
-                    return true;
                 }
+                return true;
             }
         }
 
@@ -265,11 +265,11 @@ public class Main {
         if(isWindowAvailable(pizza, cs, ce, re+1, re+1)){
             //if total amount of ingredients would not exceed max
             if(!((slice.getNumCells() + width) > maxIng)) {
-                for (int i = cs; cs <= ce; i++) {
+                for (int i = cs; i <= ce; i++) {
                     slice.cells.add(pizza[re+1][i]);
                     pizza[re+1][i].inUse=true;
-                    return true;
                 }
+                return true;
             }
         }
 
