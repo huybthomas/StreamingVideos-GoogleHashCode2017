@@ -7,6 +7,7 @@ package org.revenge.pizza.FileHandling;
 import org.revenge.pizza.models.Cell;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +32,9 @@ public class FileInput {
 
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            reader = new BufferedReader(new FileReader(classLoader.getResource(fileName).getFile()));
+            String file = classLoader.getResource(fileName).getFile();
+            System.out.println(file);
+            reader = new BufferedReader(new FileReader(file));
             sCurrentLine = reader.readLine();
             line++;
             //Read First Line
@@ -45,7 +48,7 @@ public class FileInput {
             pizza = new Cell[nRows][nCols];
             parsePizza(nCols, nRows);
 
-            System.out.println("End Parse");
+            System.out.println("File Parsed");
         /*
         while ((sCurrentLine != null && !sCurrentLine.contains("]"))) {
             switch(sCurrentLine){

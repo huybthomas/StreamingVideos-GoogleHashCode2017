@@ -28,6 +28,25 @@ public class Slice
         return num;
     }
 
+    public int getNumCells(){
+        return cells.size();
+    }
+
+    public int[][] getBounds(){
+        Collections.sort(cells, new Comparator<Cell>() {
+            @Override
+            public int compare(Cell p0, Cell p1) {return p0.compareTo(p1);}
+        });
+
+        int bounds[][] = new int[2][2];
+        bounds[0][0] = cells.get(0).row;
+        bounds[0][1] = cells.get(0).col;
+        bounds[1][0] = cells.get(cells.size()-1).row;
+        bounds[1][1] = cells.get(cells.size()-1).col;
+
+        return bounds;
+    }
+
     @Override
     public String toString(){
 

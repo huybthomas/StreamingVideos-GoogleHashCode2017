@@ -20,10 +20,12 @@ public class Main {
     public static int maxIng;
     public static int minIng;
 
+    public static List<Slice> slices;
+
     public static void main(String[] args) {
         FileInput fileInput = new FileInput();
         fileInput.parseFile("input/small.in");
-        List<Slice> slices = new ArrayList<Slice>();
+        slices = new ArrayList<Slice>();
         maxIng = fileInput.maxIngredientsPerSlice;
         minIng = fileInput.minIngredientsPerSlice;
         rowSize = fileInput.nRows;
@@ -39,7 +41,9 @@ public class Main {
         }
 
         //Write to file
-        FileOutput fileOutput = new FileOutput("resultBig.out");
+        FileOutput fileOutput = new FileOutput("resultSmall.out");
+
+        calculateCoverage();
 
         fileOutput.OutputResult(slices.size(), slices);
     }
@@ -55,6 +59,8 @@ public class Main {
         }
 
         slices.addAll(verticalCheck(pizza));
+
+        expandSlices(pizza, slices);
 
         return slices;
     }
@@ -137,8 +143,8 @@ public class Main {
 
         for(int ci = 0; ci < colSize; ci++) {
             for(int ri = 0; ri < rowSize - maxWindowSize; ri++) {
-                if(isWindowAvailable(pizza, ci, ri, ri + maxWindowSize)
-                        && hasIngredients(pizza, ci, ri, ri + maxWindowSize, minIng)) {
+                if(isWindowAvailable(pizza, ci, ci, ri, ri + maxWindowSize-1)
+                        && hasIngredients(pizza, ci, ci, ri, ri + maxWindowSize-1, minIng)) {
                     slices.add(getSliceVertical(pizza, ci, ri, ri + maxWindowSize));
                 }
             }
@@ -147,27 +153,37 @@ public class Main {
         return slices;
     }
 
-    public static boolean isWindowAvailable(Cell[][] pizza, int col, int rs, int re) {
-        for(int i = rs; i< re; i++) {
-            if(pizza[i][col].inUse) {
-                return false;
+    //pizza, col, row start, row end
+    public static boolean isWindowAvailable(Cell[][] pizza, int cs, int ce, int rs, int re) {
+        if(cs < 0 || ce >= colSize || rs < 0 || re >= rowSize)
+            return false;
+        for(int i = rs; i<= re; i++) {
+            for (int j = cs; j <= ce; j++){
+                if (pizza[i][j].inUse) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    public static boolean hasIngredients(Cell[][] pizza, int col, int rs, int re, int l) {
+    /*
+    * @param  l  Min Num Of Each Ingredient
+    */
+    public static boolean hasIngredients(Cell[][] pizza, int cs, int ce, int rs, int re, int l) {
         int noOfTomatoes = 0;
         int noOfMushrooms = 0;
-        for(int i = rs; i < re; i++) {
-            if(pizza[i][col].type.equals(Cell.Type.mushroom)) {
-                noOfMushrooms++;
-            }
-            if(pizza[i][col].type.equals(Cell.Type.tomato)) {
-                noOfTomatoes++;
-            }
-            if(noOfTomatoes >= l && noOfMushrooms >= l) {
-                return true;
+        for(int i = rs; i <= re; i++) {
+            for(int j = cs; j <= ce; j++) {
+                if (pizza[i][j].type.equals(Cell.Type.mushroom)) {
+                    noOfMushrooms++;
+                }
+                if (pizza[i][j].type.equals(Cell.Type.tomato)) {
+                    noOfTomatoes++;
+                }
+                if (noOfTomatoes >= l && noOfMushrooms >= l) {
+                    return true;
+                }
             }
         }
         return false;
@@ -182,4 +198,91 @@ public class Main {
         return slice;
     }
 
+    public static void expandSlices(Cell[][] pizza, List<Slice> slices){
+        boolean changed = true;
+        while(changed){
+            changed = false;
+            for(Slice slice: slices){
+                if(expandSlice(pizza, slice)){
+                    changed = true;
+                }
+            }
+        }
+    }
+
+    public static boolean expandSlice(Cell[][] pizza, Slice slice){
+        if(slice.getNumCells() > maxIng)
+            return false;
+        int[][] bounds = slice.getBounds();
+        int rs, re, cs, ce;
+        rs = bounds[0][0];
+        re = bounds[1][0];
+        cs = bounds[0][1];
+        ce = bounds[1][1];
+
+        //Current Slice's width and height
+        //+1 because otherwise size can be 0
+        int width = ce - cs +1;
+        int height = re - rs +1;
+
+        //check left
+        if(isWindowAvailable(pizza, cs-1, cs-1, rs, re)){
+            //if total amount of ingredients would not exceed max
+            if(!((slice.getNumCells() + height) > maxIng)) {
+                for (int i = rs; rs <= re; i++) {
+                    slice.cells.add(pizza[i][cs - 1]);
+                    pizza[i][cs - 1].inUse=true;
+                    return true;
+                }
+            }
+        }
+
+        //check right
+        if(isWindowAvailable(pizza, ce+1, ce+1, rs, re)){
+            //if total amount of ingredients would not exceed max
+            if(!((slice.getNumCells() + height) > maxIng)) {
+                for (int i = rs; rs <= re; i++) {
+                    slice.cells.add(pizza[i][ce + 1]);
+                    pizza[i][ce + 1].inUse=true;
+                    return true;
+                }
+            }
+        }
+
+        //check up
+        if(isWindowAvailable(pizza, cs, ce, rs-1, rs-1)){
+            //if total amount of ingredients would not exceed max
+            if(!((slice.getNumCells() + width) > maxIng)) {
+                for (int i = cs; cs <= ce; i++) {
+                    slice.cells.add(pizza[rs-1][i]);
+                    pizza[rs-1][i].inUse=true;
+                    return true;
+                }
+            }
+        }
+
+        //check down
+        if(isWindowAvailable(pizza, cs, ce, re+1, re+1)){
+            //if total amount of ingredients would not exceed max
+            if(!((slice.getNumCells() + width) > maxIng)) {
+                for (int i = cs; cs <= ce; i++) {
+                    slice.cells.add(pizza[re+1][i]);
+                    pizza[re+1][i].inUse=true;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static void calculateCoverage(){
+        double numCellsCovered = 0;
+        for(Slice slice: slices){
+            numCellsCovered += slice.cells.size();
+        }
+        //System.out.println("Number of cells: " + rowSize*colSize);
+        //System.out.println("Number of cells sliced: " + numCellsCovered);
+        System.out.println("Pizza coverage: " + numCellsCovered/(rowSize*colSize));
+    }
 }
