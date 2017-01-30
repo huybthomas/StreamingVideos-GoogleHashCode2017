@@ -23,7 +23,7 @@ class BlockComparator implements Comparator<Block> {
     public int compare(Block block1, Block block2) {
         int block1Sum = block1.height + block1.width;
         int block2Sum = block2.height + block2.width;
-        return (block1Sum < block2Sum) ? -1: (block1Sum == block2Sum) ? 0: 1;
+        return (block1Sum < block2Sum) ? 1: (block1Sum == block2Sum) ? 0: -1;
     }
 
 }
