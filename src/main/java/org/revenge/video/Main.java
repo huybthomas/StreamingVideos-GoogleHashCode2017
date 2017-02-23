@@ -23,6 +23,7 @@ public class Main {
     private static int cacheServerCapacity;
 
     private static List<Video> videos;
+    private static List<Cache> caches;
 
     public static void main(String[] args) {
         for (String file : INPUT_FILES) {
@@ -50,8 +51,30 @@ public class Main {
 
             for(int i = 0; i < numberOfEndPoints; i++) {
                 int[] endPointData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-
+                EndPoint endPoint = new EndPoint(i, endPointData[0]);
+                for(int j = 0; j < endPointData[1]; j++) {
+                    int[] cacheData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+                    boolean newCache = true;
+                    for(Cache cache : caches) {
+                        if(cache.id == cacheData[0]) {
+                            newCache = false;
+                            break;
+                        }
+                    }
+                    if(newCache) {
+                        caches.add(new Cache(j));
+                    }
+                    Cache neededCache = null;
+                    for(Cache cache : caches) {
+                        if(cache.id == cacheData[0]) {
+                            neededCache = cache;
+                        }
+                    }
+                    neededCache.endPointsWithLatency.put(endPoint, cacheData[1]);
+                }
             }
+
+
 
 //            pizza = new Cell[fileArgs[0]][fileArgs[1]];
 //            minIngredientsForEachPerSlice = fileArgs[2];

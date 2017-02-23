@@ -12,7 +12,6 @@ public class Cache {
 
     public HashMap<EndPoint, Integer> endPointsWithLatency;
 
-
     public Cache(int id) {
         this.id = id;
     }

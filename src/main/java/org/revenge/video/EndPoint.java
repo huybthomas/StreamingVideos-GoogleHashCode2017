@@ -11,14 +11,9 @@ public class EndPoint {
 
     public int dataCenterLatency;
 
-    public int numberOfConnectedCaches;
-
-    public HashMap<Integer, Integer> connectedCachesWithLatency;
-
-    public EndPoint(int id, int dataCenterLatency, int numberOfConnectedCaches) {
+    public EndPoint(int id, int dataCenterLatency) {
         this.id = id;
         this.dataCenterLatency = dataCenterLatency;
-        this.numberOfConnectedCaches = numberOfConnectedCaches;
     }
 
 }
