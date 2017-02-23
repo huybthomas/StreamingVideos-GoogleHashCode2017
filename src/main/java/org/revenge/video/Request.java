@@ -11,6 +11,8 @@ public class Request {
 
     public int numberOfRequests;
 
+    public Request() {}
+
     public Request(Video video, EndPoint endPoint, int numberOfRequests) {
         this.video = video;
         this.endPoint = endPoint;

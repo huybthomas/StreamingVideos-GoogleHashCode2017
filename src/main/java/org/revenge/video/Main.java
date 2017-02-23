@@ -14,7 +14,7 @@ import java.util.List;
 public class Main {
 
 //    private static final String[] INPUT_FILES = {"kittens.in", "me_at_the_zoo.in", "trending_today.in", "videos_worth_spreading.in"};
-    private static final String[] INPUT_FILES = {"kittens.in"};
+    private static final String[] INPUT_FILES = {"test.in"};
 
     private static int numberOfVideos;
     private static int numberOfEndPoints;
@@ -37,6 +37,12 @@ public class Main {
 
 
     private static void readInput(String fileName) {
+
+        videos = new ArrayList<>();
+        endPoints = new ArrayList<>();
+        caches = new ArrayList<>();
+        requests = new ArrayList<>();
+
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/video/input/" + fileName))) {
             int[] fileArgs = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             numberOfVideos = fileArgs[0];
@@ -46,61 +52,54 @@ public class Main {
             cacheServerCapacity = fileArgs[4];
 
             int[] vidData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            videos = new ArrayList<>();
             for(int i = 0; i < vidData.length; i++) {
                 videos.add(new Video(i, vidData[i]));
             }
 
-            endPoints = new ArrayList<>();
-            caches = new ArrayList<>();
             for(int i = 0; i < numberOfEndPoints; i++) {
                 int[] endPointData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                 EndPoint endPoint = new EndPoint(i, endPointData[0]);
                 endPoints.add(endPoint);
                 for(int j = 0; j < endPointData[1]; j++) {
                     int[] cacheData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-                    boolean newCache = true;
-                    for(Cache cache : caches) {
-                        if(cache.id == cacheData[0]) {
-                            newCache = false;
-                            break;
-                        }
-                    }
-                    if(newCache) {
-                        caches.add(new Cache(j));
-                    }
-                    Cache neededCache = null;
-                    for(Cache cache : caches) {
-                        if(cache.id == cacheData[0]) {
-                            neededCache = cache;
-                        }
-                    }
-                    neededCache.endPointsWithLatency.put(endPoint, cacheData[1]);
+                    Cache cache = addCacheIfNotYetExists(cacheData[0]);
+                    cache.endPointsWithLatency.put(endPoint, cacheData[1]);
+                    endPoint.connectedCaches.add(cache);
                 }
             }
 
-            requests = new ArrayList<>();
             for(int i = 0; i < numberOfRequestDescriptions; i++) {
                 int[] requestData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-                EndPoint requestEndpoint = null;
+                Request request = new Request();
                 for(EndPoint endPoint : endPoints) {
                     if(endPoint.id == requestData[1]) {
-                        requestEndpoint = endPoint;
+                        request.endPoint = endPoint;
                         break;
                     }
                 }
-                Video requestVideo = null;
                 for(Video video : videos) {
                     if(video.id == requestData[0]) {
-                        requestVideo = video;
+                        request.video = video;
                         break;
                     }
                 }
-                requests.add(new Request(requestVideo, requestEndpoint, requestData[2]));
+                request.numberOfRequests = requestData[2];
+                requests.add(request);
             }
         } catch (IOException ioe) {
             System.err.println("IOException while trying to setup file access.");
         }
+    }
+
+    private static Cache addCacheIfNotYetExists(int id) {
+        for(Cache cache : caches) {
+            if(cache.id == id) {
+                return cache;
+            }
+        }
+        Cache cache = new Cache(id);
+        caches.add(cache);
+        return cache;
     }
 
     private static void printOutput(String file) {

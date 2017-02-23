@@ -14,6 +14,7 @@ public class Cache {
 
     public Cache(int id) {
         this.id = id;
+        endPointsWithLatency = new HashMap<>();
     }
 
     public void addEndPoint(EndPoint endPoint, int latency) {
