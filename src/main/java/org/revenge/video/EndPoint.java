@@ -15,5 +15,4 @@ public class EndPoint {
         this.id = id;
         this.dataCenterLatency = dataCenterLatency;
     }
-
 }
