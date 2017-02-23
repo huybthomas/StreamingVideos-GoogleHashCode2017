@@ -1,7 +1,5 @@
 package org.revenge.video;
 
-import be.stivizu.q2016.util.Tuple;
-
 import java.util.Comparator;
 
 /**
