@@ -48,6 +48,11 @@ public class Main {
                 videos.add(new Video(i, vidData[i]));
             }
 
+            for(int i = 0; i < numberOfEndPoints; i++) {
+                int[] endPointData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+            }
+
 //            pizza = new Cell[fileArgs[0]][fileArgs[1]];
 //            minIngredientsForEachPerSlice = fileArgs[2];
 //            maxCellsPerSlice = fileArgs[3];
