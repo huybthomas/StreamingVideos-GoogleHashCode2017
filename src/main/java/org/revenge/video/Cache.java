@@ -1,5 +1,6 @@
 package org.revenge.video;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,18 @@ public class Cache {
 
     public int id;
 
+    public double averageBenefit = -1;
+
+    public int cacheFilledWithXMB  = 0;
+
     public HashMap<EndPoint, Integer> endPointsWithLatency;
+
+    public List<Video> videos;
 
     public Cache(int id) {
         this.id = id;
         endPointsWithLatency = new HashMap<>();
+        videos = new ArrayList<>();
     }
 
     public void addEndPoint(EndPoint endPoint, int latency) {

@@ -14,7 +14,7 @@ import java.util.List;
 public class Main {
 
 //    private static final String[] INPUT_FILES = {"kittens.in", "me_at_the_zoo.in", "trending_today.in", "videos_worth_spreading.in"};
-    private static final String[] INPUT_FILES = {"me_at_the_zoo.in"};
+    private static final String[] INPUT_FILES = {"videos_worth_spreading.in"};
 
     private static int numberOfVideos;
     private static int numberOfEndPoints;
@@ -30,8 +30,17 @@ public class Main {
     public static void main(String[] args) {
         for (String file : INPUT_FILES) {
             readInput(file);
-//            solve();
+            solve();
 //            printOutput(file);
+        }
+    }
+
+    public static void solve(){
+        //Sort Caches By speed
+        //AAlgorithms.sortCachesByMinlatency(caches);
+        AAlgorithms.sortCachesByBenefit(caches);
+        for(Cache c: caches){
+
         }
     }
 
