@@ -19,7 +19,8 @@ public class VideoRequests {
         for(Request request : requests)
         {
             Iterator<EndPoint> it = endPointsSet.iterator();
-            while(it.hasNext())
+            boolean foundRequest = false;
+            while(it.hasNext() && !foundRequest)
             {
                 EndPoint endPoint = it.next();
 
@@ -27,7 +28,7 @@ public class VideoRequests {
                 {
                     Iterator<Tuple<Video, Integer>> tupIt = CacheVideoRequests.iterator();
                     boolean found = false;
-                    while(tupIt.hasNext())
+                    while(tupIt.hasNext() && !found)
                     {
                         Tuple<Video, Integer> tuple = tupIt.next();
 
@@ -42,6 +43,8 @@ public class VideoRequests {
                     {
                         CacheVideoRequests.add(new Tuple<>(request.video, request.numberOfRequests));
                     }
+
+                    foundRequest = true;
                 }
             }
         }

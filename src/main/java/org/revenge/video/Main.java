@@ -14,7 +14,7 @@ import java.util.List;
 public class Main {
 
 //    private static final String[] INPUT_FILES = {"kittens.in", "me_at_the_zoo.in", "trending_today.in", "videos_worth_spreading.in"};
-    private static final String[] INPUT_FILES = {"videos_worth_spreading.in"};
+    private static final String[] INPUT_FILES = {"trending_today.in"};
 
     private static int numberOfVideos;
     private static int numberOfEndPoints;
