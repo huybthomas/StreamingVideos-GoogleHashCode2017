@@ -15,9 +15,12 @@ public class EndPoint {
 
     public List<Cache> connectedCaches;
 
+    public List<Video> videosAlreadyCached;
+
     public EndPoint(int id, int dataCenterLatency) {
         this.id = id;
         this.dataCenterLatency = dataCenterLatency;
         connectedCaches = new ArrayList<>();
+        videosAlreadyCached = new ArrayList<>();
     }
 }
