@@ -49,8 +49,17 @@ public class AAlgorithms {
         while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
              Video v = videoIterator.next();
              if(v.size < capacity - c.cacheFilledWithXMB){
-                 c.videos.add(v);
-                 c.cacheFilledWithXMB += v.size;
+                 boolean alreadyCached = false;
+                 for(EndPoint ep : c.endPointsWithLatency.keySet()){
+                     if(ep.videosAlreadyCached.contains(v)) {
+                         alreadyCached = true;
+                         ep.videosAlreadyCached.add(v);
+                     }
+                 }
+                 if(!alreadyCached) {
+                     c.videos.add(v);
+                     c.cacheFilledWithXMB += v.size;
+                 }
              }
         }
     }
