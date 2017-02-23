@@ -45,6 +45,7 @@ public class AAlgorithms {
     }
 
     public static void fillCache(Cache c, List<Video> videos, int capacity){
+        List<Video> extras = new ArrayList<>();
         Iterator<Video> videoIterator = videos.iterator();
         while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
              Video v = videoIterator.next();
@@ -53,14 +54,24 @@ public class AAlgorithms {
                  for(EndPoint ep : c.endPointsWithLatency.keySet()){
                      if(ep.videosAlreadyCached.contains(v)) {
                          alreadyCached = true;
-                         ep.videosAlreadyCached.add(v);
                      }
                  }
                  if(!alreadyCached) {
+                     for(EndPoint ep : c.endPointsWithLatency.keySet()){
+                         ep.videosAlreadyCached.add(v);
+                     }
                      c.videos.add(v);
                      c.cacheFilledWithXMB += v.size;
                  }
              }
+        }
+        videoIterator = extras.iterator();
+        while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
+            Video v = videoIterator.next();
+            if(v.size < capacity - c.cacheFilledWithXMB){
+                c.videos.add(v);
+                c.cacheFilledWithXMB += v.size;
+            }
         }
     }
 
