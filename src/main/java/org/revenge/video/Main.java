@@ -120,6 +120,7 @@ public class Main {
             bufferedWriter.newLine();
             for (Cache c : caches) {
                 bufferedWriter.write(c.toString());
+                bufferedWriter.write("\n");
             }
         } catch(IOException ioe) {
             System.err.println("IOException while trying to setup file output.");

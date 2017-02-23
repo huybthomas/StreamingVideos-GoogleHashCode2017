@@ -46,7 +46,7 @@ public class AAlgorithms {
 
     public static void fillCache(Cache c, List<Video> videos, int capacity){
         Iterator<Video> videoIterator = videos.iterator();
-        while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
+        while(c.cacheFilledWithXMB < capacity-1 && videoIterator.hasNext()){
              Video v = videoIterator.next();
              if(v.size < capacity - c.cacheFilledWithXMB){
                  c.videos.add(v);
@@ -57,7 +57,7 @@ public class AAlgorithms {
 
     public static void fillCacheComplex(Cache c, List<Video> videos, int capacity){
         Iterator<Video> videoIterator = videos.iterator();
-        while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
+        while(c.cacheFilledWithXMB < capacity-1 && videoIterator.hasNext()){
             Video v = videoIterator.next();
             if(v.size < capacity - c.cacheFilledWithXMB){
                 c.videos.add(v);
