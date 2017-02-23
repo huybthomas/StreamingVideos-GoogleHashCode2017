@@ -23,7 +23,9 @@ public class Main {
     private static int cacheServerCapacity;
 
     private static List<Video> videos;
+    private static List<EndPoint> endPoints;
     private static List<Cache> caches;
+    private static List<Request> requests;
 
     public static void main(String[] args) {
         for (String file : INPUT_FILES) {
@@ -49,9 +51,12 @@ public class Main {
                 videos.add(new Video(i, vidData[i]));
             }
 
+            endPoints = new ArrayList<>();
+            caches = new ArrayList<>();
             for(int i = 0; i < numberOfEndPoints; i++) {
                 int[] endPointData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                 EndPoint endPoint = new EndPoint(i, endPointData[0]);
+                endPoints.add(endPoint);
                 for(int j = 0; j < endPointData[1]; j++) {
                     int[] cacheData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                     boolean newCache = true;
@@ -74,14 +79,25 @@ public class Main {
                 }
             }
 
-
-
-//            pizza = new Cell[fileArgs[0]][fileArgs[1]];
-//            minIngredientsForEachPerSlice = fileArgs[2];
-//            maxCellsPerSlice = fileArgs[3];
-//            for (int i=0; i<fileArgs[0]; i++) {
-//                initPizzaRow(i, bufferedReader.readLine());
-//            }
+            requests = new ArrayList<>();
+            for(int i = 0; i < numberOfRequestDescriptions; i++) {
+                int[] requestData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+                EndPoint requestEndpoint = null;
+                for(EndPoint endPoint : endPoints) {
+                    if(endPoint.id == requestData[1]) {
+                        requestEndpoint = endPoint;
+                        break;
+                    }
+                }
+                Video requestVideo = null;
+                for(Video video : videos) {
+                    if(video.id == requestData[0]) {
+                        requestVideo = video;
+                        break;
+                    }
+                }
+                requests.add(new Request(requestVideo, requestEndpoint, requestData[2]));
+            }
         } catch (IOException ioe) {
             System.err.println("IOException while trying to setup file access.");
         }
