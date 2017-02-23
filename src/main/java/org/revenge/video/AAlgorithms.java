@@ -55,6 +55,17 @@ public class AAlgorithms {
         }
     }
 
+    public static void fillCacheComplex(Cache c, List<Video> videos, int capacity){
+        Iterator<Video> videoIterator = videos.iterator();
+        while(c.cacheFilledWithXMB < capacity && videoIterator.hasNext()){
+            Video v = videoIterator.next();
+            if(v.size < capacity - c.cacheFilledWithXMB){
+                c.videos.add(v);
+                c.cacheFilledWithXMB += v.size;
+            }
+        }
+    }
+
     @Deprecated
     public List<Cache> excludeCommonCaches(List<Cache> caches){
 

@@ -1,9 +1,6 @@
 package org.revenge.video;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by sdecleeen on 23/02/17.
@@ -36,6 +33,18 @@ public class Cache {
             lowestLatency = lowestLatency > entry.getValue() ? entry.getValue(): lowestLatency;
         }
         return lowestLatency;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.id);
+        Iterator<Video> videoIterator = videos.iterator();
+        while(videoIterator.hasNext()){
+            Video v = videoIterator.next();
+            builder.append(" " + v.id);
+        }
+        return builder.toString();
     }
 
 }
