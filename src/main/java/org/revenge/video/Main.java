@@ -4,9 +4,7 @@ import org.revenge.pizza.steve.Cell;
 import org.revenge.pizza.steve.Slice;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by sdecleeen on 23/02/17.
@@ -14,7 +12,7 @@ import java.util.List;
 public class Main {
 
 //    private static final String[] INPUT_FILES = {"kittens.in", "me_at_the_zoo.in", "trending_today.in", "videos_worth_spreading.in"};
-    private static final String[] INPUT_FILES = {"videos_worth_spreading.in"};
+    private static final String[] INPUT_FILES = {"trending_today.in"};
 
     private static int numberOfVideos;
     private static int numberOfEndPoints;
@@ -27,6 +25,8 @@ public class Main {
     private static List<Cache> caches;
     private static List<Request> requests;
 
+    private static List<String> solution;
+
     public static void main(String[] args) {
         for (String file : INPUT_FILES) {
             readInput(file);
@@ -35,13 +35,60 @@ public class Main {
         }
     }
 
-    public static void solve(){
-        //Sort Caches By speed
-        //AAlgorithms.sortCachesByMinlatency(caches);
-        AAlgorithms.sortCachesByBenefit(caches);
-        for(Cache c: caches){
-            List<Video> videosForCache = VideoRequests.SortPopularVideoForCache(c, videos, requests);
-            AAlgorithms.fillCache(c, videosForCache, cacheServerCapacity);
+//    public static void solve(){
+//        //Sort Caches By speed
+//        //AAlgorithms.sortCachesByMinlatency(caches);
+//        AAlgorithms.sortCachesByBenefit(caches);
+//        for(Cache c: caches){
+//            List<Video> videosForCache = VideoRequests.SortPopularVideoForCache(c, videos, requests);
+//            AAlgorithms.fillCache(c, videosForCache, cacheServerCapacity);
+//        }
+//    }
+
+    public static void solve() {
+        solution = new ArrayList<>();
+        for(Cache cache : caches) {
+            HashMap<Request, Integer> videoPopularityHM = new HashMap<>();
+            Set<EndPoint> endPoints = cache.endPointsWithLatency.keySet();
+            for(Request request : requests) {
+                if(endPoints.contains(request.endPoint)) {
+                    if(videoPopularityHM.containsKey(request.video)) {
+                        videoPopularityHM.put(request, videoPopularityHM.get(request.video) + request.numberOfRequests);
+                    } else {
+                        videoPopularityHM.put(request, request.numberOfRequests);
+                    }
+                }
+            }
+
+            String partialSolution = String.valueOf(cache.id);
+            List<Integer> addedVideos = new ArrayList<>();
+            int remainingSize = cacheServerCapacity;
+
+            for(int i=0; i<50; i++) {
+
+                Request bestRequest = null;
+                Iterator it = videoPopularityHM.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    if(!addedVideos.contains(((Request) pair.getKey()).video.id) && ((Request)pair.getKey()).video.size <= remainingSize) {
+                        if (bestRequest == null) {
+                            bestRequest = (Request) pair.getKey();
+                        } else if ((Integer) pair.getValue() > bestRequest.numberOfRequests) {
+                            bestRequest = (Request) pair.getKey();
+                        }
+                    }
+                }
+
+                if(bestRequest != null) {
+                    partialSolution += " " + bestRequest.video.id;
+                    remainingSize -= bestRequest.video.size;
+                    addedVideos.add(bestRequest.video.id);
+                    requests.remove(bestRequest);
+                }
+
+            }
+
+            solution.add(partialSolution);
         }
     }
 
@@ -114,14 +161,19 @@ public class Main {
 
     private static void printOutput(String file) {
         String outputFilePath = file.substring(0, file.indexOf(".")) + ".out";
-//        int score = 0;
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/video/output/" + outputFilePath))) {
-            bufferedWriter.write(Integer.toString(caches.size()));
+            bufferedWriter.write(Integer.toString(solution.size()));
             bufferedWriter.newLine();
-            for (Cache c : caches) {
-                bufferedWriter.write(c.toString());
-                bufferedWriter.write("\n");
+            for(String s : solution) {
+                bufferedWriter.write(s);
+                bufferedWriter.newLine();
             }
+//            bufferedWriter.write(Integer.toString(caches.size()));
+//            bufferedWriter.newLine();
+//            for (Cache c : caches) {
+//                bufferedWriter.write(c.toString());
+//                bufferedWriter.write("\n");
+//            }
         } catch(IOException ioe) {
             System.err.println("IOException while trying to setup file output.");
         }
