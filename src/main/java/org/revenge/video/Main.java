@@ -4,14 +4,25 @@ import org.revenge.pizza.steve.Cell;
 import org.revenge.pizza.steve.Slice;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by sdecleeen on 23/02/17.
  */
 public class Main {
 
-    private static final String[] INPUT_FILES = {"", "", "", ""};
+//    private static final String[] INPUT_FILES = {"kittens.in", "me_at_the_zoo.in", "trending_today.in", "videos_worth_spreading.in"};
+    private static final String[] INPUT_FILES = {"kittens.in"};
+
+    private static int numberOfVideos;
+    private static int numberOfEndPoints;
+    private static int numberOfRequestDescriptions;
+    private static int numberOfCacheServers;
+    private static int cacheServerCapacity;
+
+    private static List<Video> videos;
 
     public static void main(String[] args) {
         for (String file : INPUT_FILES) {
@@ -24,7 +35,19 @@ public class Main {
 
     private static void readInput(String fileName) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/video/input/" + fileName))) {
-//            int[] fileArgs = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            int[] fileArgs = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            numberOfVideos = fileArgs[0];
+            numberOfEndPoints = fileArgs[1];
+            numberOfRequestDescriptions = fileArgs[2];
+            numberOfCacheServers = fileArgs[3];
+            cacheServerCapacity = fileArgs[4];
+
+            int[] vidData = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            videos = new ArrayList<>();
+            for(int i = 0; i < vidData.length; i++) {
+                videos.add(new Video(i, vidData[i]));
+            }
+
 //            pizza = new Cell[fileArgs[0]][fileArgs[1]];
 //            minIngredientsForEachPerSlice = fileArgs[2];
 //            maxCellsPerSlice = fileArgs[3];
