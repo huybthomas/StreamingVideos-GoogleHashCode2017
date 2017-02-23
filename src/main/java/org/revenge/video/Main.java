@@ -31,7 +31,7 @@ public class Main {
         for (String file : INPUT_FILES) {
             readInput(file);
             solve();
-//            printOutput(file);
+            printOutput(file);
         }
     }
 
@@ -40,7 +40,8 @@ public class Main {
         //AAlgorithms.sortCachesByMinlatency(caches);
         AAlgorithms.sortCachesByBenefit(caches);
         for(Cache c: caches){
-
+            List<Video> videosForCache = VideoRequests.SortPopularVideoForCache(c, videos, requests);
+            AAlgorithms.fillCache(c, videosForCache, cacheServerCapacity);
         }
     }
 
@@ -115,14 +116,11 @@ public class Main {
         String outputFilePath = file.substring(0, file.indexOf(".")) + ".out";
 //        int score = 0;
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/video/output/" + outputFilePath))) {
-//            bufferedWriter.write(Integer.toString(slices.size()));
-//            bufferedWriter.newLine();
-//            for (Slice slice : slices) {
-//                score += (slice.r2 - slice.r1 + 1) * (slice.c2 - slice.c1 + 1);
-//                bufferedWriter.write(slice.r1 + " " + slice.c1 + " " + slice.r2 + " " + slice.c2);
-//                bufferedWriter.newLine();
-//            }
-//            System.out.println("Score for " + file + ": " + score + "/" + (pizza.length * pizza[0].length));
+            bufferedWriter.write(Integer.toString(caches.size()));
+            bufferedWriter.newLine();
+            for (Cache c : caches) {
+                bufferedWriter.write(c.toString());
+            }
         } catch(IOException ioe) {
             System.err.println("IOException while trying to setup file output.");
         }
