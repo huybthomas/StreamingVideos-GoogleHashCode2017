@@ -33,8 +33,7 @@ public class VideoRequests {
 
                         if(request.video.equals(tuple.getLhs()))
                         {
-                            Integer videoRequests = tuple.getRhs();
-                            videoRequests = tuple.getRhs() + request.numberOfRequests;
+                            tuple.setRhs(tuple.getRhs() + request.numberOfRequests);
                             found = true;
                         }
                     }

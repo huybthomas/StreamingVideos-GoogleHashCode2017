@@ -5,9 +5,9 @@ package org.revenge.video;
  */
 public class Tuple<L, R> {
 
-    private final L lhs;
+    private L lhs;
 
-    private final R rhs;
+    private R rhs;
 
     public Tuple(L lhs, R rhs) {
         this.lhs = lhs;
@@ -20,6 +20,11 @@ public class Tuple<L, R> {
 
     public R getRhs() {
         return rhs;
+    }
+
+    public void setRhs(R rhs)
+    {
+        this.rhs = rhs;
     }
 
     @Override
