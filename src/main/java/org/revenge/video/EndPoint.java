@@ -20,5 +20,4 @@ public class EndPoint {
         this.dataCenterLatency = dataCenterLatency;
         connectedCaches = new ArrayList<>();
     }
-
 }
